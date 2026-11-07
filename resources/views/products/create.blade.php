@@ -3,83 +3,118 @@
 @section('title', 'Tambah Produk')
 
 @section('content')
-<div class="px-4 sm:px-0">
-    <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">Tambah Produk Baru</h1>
+<div class="max-w-3xl mx-auto space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-900">Tambah Produk Baru</h2>
+            <p class="text-sm text-gray-500 mt-0.5">Lengkapi informasi produk dan jumlah stok barang UMKM.</p>
+        </div>
+        <a href="{{ route('products.index') }}"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition">
+            <span>&larr; Kembali</span>
+        </a>
     </div>
 
-    <div class="bg-white shadow-md rounded-lg p-6">
-        <form action="{{ route('products.store') }}" method="POST">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-2xs p-6 sm:p-8">
+        <form action="{{ route('products.store') }}" method="POST" class="space-y-5">
             @csrf
 
-            <div class="mb-4">
-                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+            <div>
+                <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">
                     Nama Produk <span class="text-red-600">*</span>
                 </label>
-                <input type="text" 
-                       name="name" 
-                       id="name" 
+                <input type="text"
+                       name="name"
+                       id="name"
                        value="{{ old('name') }}"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 @error('name') border-red-500 @enderror"
-                       placeholder="Masukkan nama produk">
+                       required
+                       class="w-full px-4 py-2.5 bg-gray-50/60 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#097220] @error('name') border-red-500 @enderror"
+                       placeholder="Contoh: Keripik Pisang Original">
                 @error('name')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-1.5 text-xs font-medium text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="mb-4">
-                <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
-                    Kategori
-                </label>
-                <input type="text" 
-                       name="category" 
-                       id="category" 
-                       value="{{ old('category') }}"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 @error('category') border-red-500 @enderror"
-                       placeholder="Contoh: Elektronik, Makanan, dll">
-                @error('category')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                    <label for="category" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Kategori
+                    </label>
+                    <input type="text"
+                           name="category"
+                           id="category"
+                           list="category-options"
+                           value="{{ old('category') }}"
+                           class="w-full px-4 py-2.5 bg-gray-50/60 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#097220] @error('category') border-red-500 @enderror"
+                           placeholder="Makanan / Minuman">
+                    <datalist id="category-options">
+                        <option value="Makanan"></option>
+                        <option value="Minuman"></option>
+                        <option value="Kerajinan"></option>
+                    </datalist>
+                    @error('category')
+                        <p class="mt-1.5 text-xs font-medium text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="price" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Harga (Rp) <span class="text-red-600">*</span>
+                    </label>
+                    <input type="number"
+                           name="price"
+                           id="price"
+                           value="{{ old('price') }}"
+                           step="1"
+                           min="0"
+                           required
+                           class="w-full px-4 py-2.5 bg-gray-50/60 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#097220] @error('price') border-red-500 @enderror"
+                           placeholder="15000">
+                    @error('price')
+                        <p class="mt-1.5 text-xs font-medium text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="stock" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Stok Barang (pcs) <span class="text-red-600">*</span>
+                    </label>
+                    <input type="number"
+                           name="stock"
+                           id="stock"
+                           value="{{ old('stock', 0) }}"
+                           step="1"
+                           min="0"
+                           required
+                           class="w-full px-4 py-2.5 bg-gray-50/60 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#097220] @error('stock') border-red-500 @enderror"
+                           placeholder="100">
+                    @error('stock')
+                        <p class="mt-1.5 text-xs font-medium text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
 
-            <div class="mb-4">
-                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
-                    Deskripsi
+            <div>
+                <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Deskripsi Produk
                 </label>
-                <textarea name="description" 
-                          id="description" 
+                <textarea name="description"
+                          id="description"
                           rows="4"
-                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 @error('description') border-red-500 @enderror"
-                          placeholder="Masukkan deskripsi produk">{{ old('description') }}</textarea>
+                          class="w-full px-4 py-2.5 bg-gray-50/60 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#097220] @error('description') border-red-500 @enderror"
+                          placeholder="Masukkan deskripsi singkat produk...">{{ old('description') }}</textarea>
                 @error('description')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-1.5 text-xs font-medium text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="mb-6">
-                <label for="price" class="block text-sm font-medium text-gray-700 mb-2">
-                    Harga (Rp) <span class="text-red-600">*</span>
-                </label>
-                <input type="number" 
-                       name="price" 
-                       id="price" 
-                       value="{{ old('price') }}"
-                       step="0.01"
-                       min="0"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 @error('price') border-red-500 @enderror"
-                       placeholder="Contoh: 50000">
-                @error('price')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="flex items-center gap-3">
-                <button type="submit" 
-                        class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow transition">
+            <div class="pt-2 flex items-center gap-3">
+                <button type="submit"
+                        class="bg-[#097220] hover:bg-[#075c19] text-white text-sm font-semibold py-2.5 px-6 rounded-xl shadow-xs transition">
                     Simpan Produk
                 </button>
-                <a href="{{ route('products.index') }}" 
-                   class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-6 rounded-lg transition">
+                <a href="{{ route('products.index') }}"
+                   class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold py-2.5 px-6 rounded-xl transition">
                     Batal
                 </a>
             </div>
